@@ -27,14 +27,14 @@
             try {
                 const response = await fetch('/api/weather-data');
                 const data = await response.json();
-                console.log(data); // Add this line to debug
+                console.log(data); //  debug
         
                 const tableBody = document.getElementById('weatherData');
         
-                // Clear existing rows
+               
                 tableBody.innerHTML = '';
         
-                // Populate the table with fetched data
+             
                 data.forEach(row => {
                     const tr = document.createElement('tr');
                     tr.innerHTML = `
