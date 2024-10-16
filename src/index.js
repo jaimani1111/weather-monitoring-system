@@ -1,18 +1,18 @@
 require('dotenv').config();
 const nodemailer = require('nodemailer');
 
-const express = require('express'); // Import Express
+const express = require('express'); 
 const db = require('./db');
 const { getWeatherData, convertKelvinToCelsius, recordWeatherData, calculateDailySummary } = require('./weather');
 const path = require('path');
 
-const app = express(); // Create an instance of Express
-const PORT = process.env.PORT || 3000; // Set the port
+const app = express(); 
+const PORT = process.env.PORT || 3000; 
 
-// Serve static files from the public directory
+
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Serve the HTML file on the root URL
+
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'index.html'));
 });
@@ -20,7 +20,7 @@ app.get('/', (req, res) => {
 const CITIES = ['Delhi', 'Mumbai', 'Chennai', 'Bangalore', 'Kolkata', 'Hyderabad'];
 db.createTable();
 
-const updateInterval = 5 * 60 * 1000; // 5 minutes
+const updateInterval = 5 * 60 * 1000; 
 
 const alertThresholds = {
     temperature: 35 // in Celsius
@@ -29,7 +29,7 @@ const alertThresholds = {
 const checkAlerts = (temp) => {
     if (temp > alertThresholds.temperature) {
         console.log(`Alert: Temperature exceeded ${alertThresholds.temperature}°C!`);
-        // Implement email notifications here using nodemailer if desired
+        // email notifications here using nodemailer if desired
     }
 };
 
@@ -52,7 +52,7 @@ const fetchWeatherUpdates = async () => {
         const temp = convertKelvinToCelsius(weatherData.main.temp);
         const feels_like = convertKelvinToCelsius(weatherData.main.feels_like);
         const condition = weatherData.weather[0].main;
-        const timestamp = new Date(weatherData.dt * 1000); // Convert Unix timestamp to JS Date
+        const timestamp = new Date(weatherData.dt * 1000); e
 
         console.log(`Weather in ${city} at ${timestamp}: ${temp}°C, feels like ${feels_like}°C, condition: ${condition}`);
     }
@@ -61,7 +61,7 @@ const fetchWeatherUpdates = async () => {
 // Fetch weather updates at regular intervals
 setInterval(fetchWeatherUpdates, updateInterval);
 
-// Initial fetch
+
 fetchWeatherUpdates();
 
 // API endpoint to fetch weather data
@@ -80,7 +80,7 @@ app.listen(PORT, () => {
     console.log(`Server is running on http://localhost:${PORT}`);
 });
 
-// Serve static files from the public directory
+
 app.use(express.static(path.join(__dirname, 'public')));
 
 // Serve the HTML file on the root URL
@@ -92,8 +92,8 @@ app.get('/', (req, res) => {
 const transporter = nodemailer.createTransport({
     service: 'gmail',
     auth: {
-        user: 'jaimanichoudhary446@gmail.com', // Your email address
-        pass: EMAIL_PASS, // Your email password
+        user: 'EMAIL_SENDER_ADD_FROM_ENV', 
+        pass: EMAIL_PASS, 
     },
 });
 
