@@ -2,19 +2,15 @@
 
 This application monitors weather conditions in real time using data from the OpenWeatherMap API. It processes the data to provide rollups and aggregates, and sends alerts when specific conditions are met.
 
-## Features
-
-- **Real-time Weather Monitoring:** Fetches current weather data for specified cities.
-- **Email Alerts:** Sends email notifications when specific weather thresholds are exceeded.
-- **Daily Rollups:** Logs and summarizes weather data daily.
-
 ## Project Structure
 
 - `src/`: Contains the application source code
-  - `db.js`: Database connection and schema
-  - `weather.js`: Functions for fetching weather data and processing
-  - `alerts.js`: Functions for sending alerts (including email alerts)
+  - `db.js`: Database connection and schema (uses SQLite for data storage)
+  - `weather.js`: Functions for fetching weather data and processing it
+  - `alerts.js`: Functions for sending alerts via email
   - `index.js`: Main application file
+- `public/`: Contains static files
+  - `index.html`: The main HTML file served to users
 - `package.json`: Project metadata and dependencies
 - `README.md`: Project documentation
 
@@ -23,37 +19,47 @@ This application monitors weather conditions in real time using data from the Op
 1. Clone the repository.
 2. Navigate to the project directory.
 3. Run `npm install` to install dependencies.
-4. Set up your MySQL database and configure the connection in `db.js`.
-5. Get an API key from OpenWeatherMap and integrate it into the `weather.js` file.
-6. Configure email notifications:
-   - If using Gmail, ensure you have allowed "Less secure app access" or use an App Password.
-   - Update the email credentials in the `.env` file.
+4. Set up your SQLite database (the application automatically manages the database schema).
+5. Get an API key from OpenWeatherMap and integrate it in the `weather.js` file.
+6. Update your `.env` file with your email credentials for sending alerts.
 7. Run the application with `node src/index.js`.
 
 ## Usage
 
-The application will fetch weather data every 5 minutes and log the results. Alerts will be sent via email if conditions exceed specified thresholds. 
+The application will fetch weather data every 5 minutes and log the results. If the temperature exceeds the specified threshold (default is set to **19°C** for testing purposes), an email alert will be sent to the specified email address.
 
-### Alert Thresholds
+### Workflow
 
-- Temperature: Set to **19°C** for testing purposes. Alerts will trigger if the temperature exceeds this value.
+1. The application fetches weather data for predefined cities from the OpenWeatherMap API.
+2. It processes the data to convert temperature from Kelvin to Celsius.
+3. The application checks if the temperature exceeds the threshold. If it does, an email alert is triggered.
+4. Daily summaries of the weather data are recorded in the SQLite database.
 
-## Email Configuration
+### Diagram
 
-The application uses SMTP to send email alerts. Here’s a brief overview of the configuration:
+ flowchart that illustrates the workflow of the Weather Monitoring Application:
 
-- **SMTP Service:** Gmail (can be replaced with another service)
-- **Sender Email:** Your email address (e.g., `jaimanichoudhary446@gmail.com`)
-- **Receiver Email:** The email address to receive alerts (e.g., `nikhchy5@gmail.com`)
-- **Authentication:** Use your email password or App Password (recommended if 2FA is enabled).
-
-Ensure your email settings allow the application to send alerts without blocking them.
-
-## Contributing
-
-Feel free to fork the repository and submit pull requests with improvements or additional features.
-
-## License
-
-This project is licensed under the MIT License.
+```plaintext
+ +-------------------+
+ | Fetch Weather Data|
+ +-------------------+
+          |
+          v
+ +-------------------+
+ | Process Data      |
+ | (Convert Units)   |
+ +-------------------+
+          |
+          v
+ +-------------------+
+ | Check Thresholds  |
+ +-------------------+
+          |
+     +----+-----+
+     |          |
+     v          v
+  +---------+   +----------------+
+  | Send    |   | Log Data to DB |
+  | Email   |   +----------------+
+  +---------+
 
