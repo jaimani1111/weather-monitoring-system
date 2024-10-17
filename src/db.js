@@ -1,5 +1,5 @@
 const sqlite3 = require('sqlite3').verbose();
-const db = new sqlite3.Database('./weather.db'); // connect to database
+const db = new sqlite3.Database('./weather.db'); 
 
 // create weather table
 const createTable = () => {
