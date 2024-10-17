@@ -4,20 +4,24 @@ const API_KEY = process.env.OPENWEATHERMAP_API_KEY;
 const CITIES = ['Delhi', 'Mumbai', 'Chennai', 'Bangalore', 'Kolkata', 'Hyderabad'];
 const BASE_URL = 'https://api.openweathermap.org/data/2.5/weather';
 
+// fetch weather data
 const getWeatherData = async (city) => {
     const response = await axios.get(`${BASE_URL}?q=${city}&appid=${API_KEY}`);
     return response.data;
 };
 
+// convert kelvin to celsius
 const convertKelvinToCelsius = (kelvin) => {
     return kelvin - 273.15;
 };
 
 module.exports = { getWeatherData, convertKelvinToCelsius };
+
 const dailySummaries = {};
 
+// record weather data
 const recordWeatherData = (city, temp, condition) => {
-    const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+    const today = new Date().toISOString().split('T')[0]; // get current date
 
     if (!dailySummaries[today]) {
         dailySummaries[today] = {
@@ -36,6 +40,7 @@ const recordWeatherData = (city, temp, condition) => {
     dailySummaries[today].conditions[condition] = (dailySummaries[today].conditions[condition] || 0) + 1;
 };
 
+// calculate summary
 const calculateDailySummary = (date) => {
     const summary = dailySummaries[date];
     if (summary) {
