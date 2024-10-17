@@ -12,7 +12,7 @@ const transporter = nodemailer.createTransport({
 
 /**
  * Sends an email alert when the temperature exceeds the threshold.
- * @param {number} temperature - The current temperature.
+ 
  */
 function sendAlert(temperature) {
   const mailOptions = {
